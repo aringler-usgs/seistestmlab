@@ -246,7 +246,7 @@ function noisemainplot
         end
         if(~isempty(datafile2))
             [pspec2, per2, stahand2, tseries2,ttime2] = noise(datafile2, ...
-        sen2,dig2);
+        sen2,dig2,stimestr,etimestr);
             thand2=stahand2(length(stahand2)-8:length(stahand2));
             stahand2=stahand2(1:length(stahand2)-8);
             subplot(10,6,[ 1 2 3 4 5 7 8 9 10 11 13 14 15 16 17 19 20 21 22 23 ] )
@@ -262,7 +262,7 @@ function noisemainplot
         end   
         if(~isempty(datafile3))
             [pspec3, per3, stahand3, tseries3,ttime3] = noise(datafile3, ...
-        sen3,dig3);
+        sen3,dig3,stimestr,etimestr);
             thand3=stahand3(length(stahand3)-8:length(stahand3));
             stahand3=stahand3(1:length(stahand3)-8);
             subplot(10,6,[ 1 2 3 4 5 7 8 9 10 11 13 14 15 16 17 19 20 21 22 23 ] )
