@@ -209,7 +209,11 @@ function noisemainplot
     function sen1button_Callback(~,~) 
         if(~isempty(datafile3))
             direstart = datafile3;
-            extend = strfind(direstart,'/');
+            if(strcmp(computer,'PCWIN64') || strcmp(computer,'PCWIN'))
+                extend = strfind(direstart,'\');
+            else
+                extend = strfind(direstart,'/');
+            end
             direstart = direstart(1:extend(length(extend)));
             [FileName,PathName] = uigetfile('*.seed', ...
                 'Select the Seed File', direstart);
@@ -223,7 +227,11 @@ function noisemainplot
     function sen2button_Callback(~,~)
         if(~isempty(datafile1))
             direstart = datafile1;
-            extend = strfind(direstart,'/');
+            if(strcmp(computer,'PCWIN64') || strcmp(computer,'PCWIN'))
+                extend = strfind(direstart,'\');
+            else
+                extend = strfind(direstart,'/');
+            end
             direstart = direstart(1:extend(length(extend)));
             [FileName,PathName] = uigetfile('*.seed', ...
                 'Select the Seed File', direstart);
@@ -237,7 +245,11 @@ function noisemainplot
     function sen3button_Callback(~,~)
         if(~isempty(datafile2))
             direstart = datafile2;
-            extend = strfind(direstart,'/');
+            if(strcmp(computer,'PCWIN64') || strcmp(computer,'PCWIN'))
+                extend = strfind(direstart,'\');
+            else
+                extend = strfind(direstart,'/');
+            end
             direstart = direstart(1:extend(length(extend)));
             [FileName,PathName] = uigetfile('*.seed', ...
                 'Select the Seed File', direstart);
