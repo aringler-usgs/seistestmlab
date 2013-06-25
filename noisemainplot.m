@@ -167,37 +167,37 @@ function noisemainplot
     set(f,'Visible','on');
   
    
-    function popup_menu_Callback_sen_1(source,eventdata) 
+    function popup_menu_Callback_sen_1(source,~) 
         str = get(source, 'String');
         val = get(source,'Value');
         sen1=str{val};
     end
 
-    function popup_menu_Callback_sen_2(source,eventdata) 
+    function popup_menu_Callback_sen_2(source,~) 
         str = get(source, 'String');
         val = get(source,'Value');
         sen2=str{val};
     end
 
-    function popup_menu_Callback_sen_3(source,eventdata) 
+    function popup_menu_Callback_sen_3(source,~) 
         str = get(source, 'String');
         val = get(source,'Value');
         sen3=str{val};
     end
 
-    function popup_menu_Callback_dig_1(source,eventdata) 
+    function popup_menu_Callback_dig_1(source,~) 
         str = get(source, 'String');
         val = get(source,'Value');
         dig1=str{val};
     end
 
-    function popup_menu_Callback_dig_2(source,eventdata) 
+    function popup_menu_Callback_dig_2(source,~) 
         str = get(source, 'String');
         val = get(source,'Value');
         dig2=str{val};
     end
 
-    function popup_menu_Callback_dig_3(source,eventdata) 
+    function popup_menu_Callback_dig_3(source,~) 
         str = get(source, 'String');
         val = get(source,'Value');
         dig3=str{val};
@@ -206,22 +206,49 @@ function noisemainplot
     % Push button callbacks. Each callback plots current_data in
     % the specified plot type.
  
-    function sen1button_Callback(source,eventdata) 
-        [FileName,PathName] = uigetfile('*.seed','Select the Seed File');
+    function sen1button_Callback(~,~) 
+        if(~isempty(datafile3))
+            direstart = datafile3;
+            extend = strfind(direstart,'/');
+            direstart = direstart(1:extend(length(extend)));
+            [FileName,PathName] = uigetfile('*.seed', ...
+                'Select the Seed File', direstart);
+        else
+            [FileName,PathName] = uigetfile('*.seed', ...
+                'Select the Seed File');
+        end
         datafile1 = fullfile(PathName,FileName);
     end
  
-    function sen2button_Callback(source,eventdata) 
-        [FileName,PathName] = uigetfile('*.seed','Select the Seed File');
+    function sen2button_Callback(~,~)
+        if(~isempty(datafile1))
+            direstart = datafile1;
+            extend = strfind(direstart,'/');
+            direstart = direstart(1:extend(length(extend)));
+            [FileName,PathName] = uigetfile('*.seed', ...
+                'Select the Seed File', direstart);
+        else
+            [FileName,PathName] = uigetfile('*.seed', ...
+                'Select the Seed File');
+        end
         datafile2 = fullfile(PathName,FileName);
     end
  
-    function sen3button_Callback(source,eventdata) 
-        [FileName,PathName] = uigetfile('*.seed','Select the Seed File');
+    function sen3button_Callback(~,~)
+        if(~isempty(datafile2))
+            direstart = datafile2;
+            extend = strfind(direstart,'/');
+            direstart = direstart(1:extend(length(extend)));
+            [FileName,PathName] = uigetfile('*.seed', ...
+                'Select the Seed File', direstart);
+        else
+            [FileName,PathName] = uigetfile('*.seed', ...
+                'Select the Seed File');
+        end
         datafile3 = fullfile(PathName,FileName);
     end 
 
-    function plot_Callback(source,eventdata)
+    function plot_Callback(~,~)
         phand1=[];
         phand2=[];
         phand3=[];
@@ -239,7 +266,7 @@ function noisemainplot
             subplot(10,6,[ 31 32 33 34 35])
             plot(ttime1,tseries1,'color','r');
             datetick('x',15)
-            xlabel('Time (s)','FontSize',14);
+            xlabel('Time (HH:MM)','FontSize',14);
             ylabel('Volts');
             title(['Channel 1 Time Series ' thand1],'FontSize',14);
             set(gca,'fontsize',14);
@@ -265,7 +292,8 @@ function noisemainplot
         sen3,dig3,stimestr,etimestr);
             thand3=stahand3(length(stahand3)-8:length(stahand3));
             stahand3=stahand3(1:length(stahand3)-8);
-            subplot(10,6,[ 1 2 3 4 5 7 8 9 10 11 13 14 15 16 17 19 20 21 22 23 ] )
+            subplot(10,6,[ 1 2 3 4 5 7 8 9 10 11 13 14 15 16 17 19 ...
+                20 21 22 23 ] )
             phand3=semilogx(per3,pspec3,'color','g');  
             hold on
             subplot(10,6,[ 55 56 57 58 59])
@@ -276,7 +304,8 @@ function noisemainplot
             title(['Channel 3 Time Series ' thand3],'FontSize',14);
             set(gca,'fontsize',14);  
         end  
-        subplot(10,6,[ 1 2 3 4 5 7 8 9 10 11 13 14 15 16 17 19 20 21 22 23 ] );
+        subplot(10,6,[ 1 2 3 4 5 7 8 9 10 11 13 14 15 16 17 19 ...
+            20 21 22 23 ] );
         hold on
         p1=semilogx(nlnm(:,1),nlnm(:,4),'color','k','LineWidth',3);
         semilogx(nhnm(:,1),nhnm(:,2),'color','k','LineWidth',3);
@@ -287,13 +316,17 @@ function noisemainplot
         xlim([.01 1000]);
         ylim([-200 -80]);
         if(length([phand1 phand2 phand3]) == 3);
-            legend([phand1 phand2 phand3 p1],stahand1,stahand2,stahand3,'NLNM','Location','NorthWest');
+            legend([phand1 phand2 phand3 p1],stahand1,stahand2, ...
+                stahand3,'NLNM','Location','NorthWest');
         elseif(length([phand1 phand2]) == 2);
-            legend([phand1 phand2 p1],stahand1,stahand2,'NLNM','Location','NorthWest');
+            legend([phand1 phand2 p1],stahand1,stahand2,'NLNM', ...
+                'Location','NorthWest');
         elseif(length([phand1 phand3]) == 2);
-            legend([phand1 phand3 p1],stahand1,stahand3,'NLNM','Location','NorthWest');
+            legend([phand1 phand3 p1],stahand1,stahand3,'NLNM', ...
+                'Location','NorthWest');
         elseif(length([phand2 phand3]) == 2);
-            legend([phand2 phand3 p1],stahand2,stahand3,'NLNM','Location','NorthWest');
+            legend([phand2 phand3 p1],stahand2,stahand3,'NLNM', ...
+                'Location','NorthWest');
         elseif(length(phand1)==1);
             legend([phand1 p1],stahand1,'NLNM','Location','NorthWest');
         elseif(length(phand2)==1);
@@ -311,15 +344,16 @@ function noisemainplot
         
     end
 
-    function clearme_Callback(source,eventdata)
-        subplot(10,6,[ 1 2 3 4 5 7 8 9 10 11 13 14 15 16 17 19 20 21 22 23 ] )
+    function clearme_Callback(~,~)
+        subplot(10,6,[ 1 2 3 4 5 7 8 9 10 11 13 14 15 16 17 19 20 21 ...
+            22 23 ] )
         p1=semilogx(nlnm(:,1),nlnm(:,4),'color','k','LineWidth',3);
         hold on
         semilogx(nhnm(:,1),nhnm(:,2),'color','k','LineWidth',3);
         set(gca,'FontSize',14);
         xlim([.01 1000]);
         ylim([-200 -80]);
-        legend([p1],'NLNM','FontSize',14,'Location','NorthWest');
+        legend(p1,'NLNM','FontSize',14,'Location','NorthWest');
         hold off
         title('Noise Estimate','FontSize',14);
         xlabel('Period (s)','FontSize',14);
@@ -348,32 +382,25 @@ function noisemainplot
         datafile1=[];
         datafile2=[];
         datafile3=[];
-%       dig1='Q330HR';
-%       dig2='Q330HR';
-%        dig3='Q330HR';
-%        sen1='STS-1';
-%        sen2='STS-1';
-%        sen3='STS-1';
-        stahand1='';
         stahand2='';
         stahand3='';
         
         
     end
-    function saveme_Callback(source,eventdata)
+    function saveme_Callback(~,~)
         orient LandScape
         printstr=regexprep([stahand1 stahand2 stahand3],' ','');
-        if(length(printstr)>0)
+        if(~isempty(printstr))
             print('-dpdf',[printstr '.pdf']);
         end
     end
     
-    function starttime_Callback(source,eventdata) 
+    function starttime_Callback(source,~) 
         str = get(source, 'String');
         stimestr=str;
     end
         
-    function endtime_Callback(source,eventdata) 
+    function endtime_Callback(source,~) 
         str = get(source, 'String');
         etimestr=str;
     end    

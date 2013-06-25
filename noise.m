@@ -21,18 +21,18 @@ function [pspec, per, stahand, tseries, ttime] = noise(noisedata, ...
     noisedata=cat(1,noisedata.d);
     if(~isempty(stimestr))
         stimeind=strfind(stimestr,':');
-        stimehour = str2num(stimestr(1:stimeind-1));
-        stimemin = str2num(stimestr(stimeind+1:length(stimestr)));
-        stime = datenum(str2num(year),01,str2num(day), ...
+        stimehour = str2double(stimestr(1:stimeind-1));
+        stimemin = str2double(stimestr(stimeind+1:length(stimestr)));
+        stime = datenum(str2double(year),01,str2double(day), ...
             stimehour,stimemin,0);
         noisedata=noisedata(find(noisetime>= stime));
         noisetime=noisetime(find(noisetime>= stime));
     end
     if(~isempty(etimestr))
         etimeind=strfind(etimestr,':');
-        etimehour = str2num(etimestr(1:etimeind-1));
-        etimemin = str2num(etimestr(etimeind+1:length(etimestr)));
-        etime = datenum(str2num(year),01,str2num(day), ...
+        etimehour = str2double(etimestr(1:etimeind-1));
+        etimemin = str2double(etimestr(etimeind+1:length(etimestr)));
+        etime = datenum(str2double(year),01,str2double(day), ...
             etimehour,etimemin,0);
         noisedata=noisedata(find(noisetime<= etime));
         noisetime=noisetime(find(noisetime<= etime));
