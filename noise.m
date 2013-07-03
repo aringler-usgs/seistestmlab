@@ -1,5 +1,5 @@
-function [pspec, per, stahand, tseries, ttime] = noise(noisedata, ...
-    sensor,digitizer,stimestr,etimestr)
+function [pspec, per, stahand, tseries, ttime, mabsvolt ...
+    ] = noise(noisedata, sensor,digitizer,stimestr,etimestr,lowpass)
     %Compute spectra and correct for response
     %Read in data
     try
@@ -38,13 +38,14 @@ function [pspec, per, stahand, tseries, ttime] = noise(noisedata, ...
         noisetime=noisetime(find(noisetime<= etime));
     end
     
-
+    
 
     %Compute the spectra
     %[pspec,fre]=pwelch(noisedata,floor(length(noisedata)/10), ...
      %   floor(length(noisedata)/20),floor(length(noisedata)/10),sps);
 	[pspec,fre]=psd(noisedata,floor(length(noisedata)/10),sps);
-
+    pspec = pspec/sps;
+    
     %Get the response and correct
     [zer,pol,gai]=getrespmodel(sensor);
     resp=1;
@@ -58,7 +59,7 @@ function [pspec, per, stahand, tseries, ttime] = noise(noisedata, ...
 
     digsen=getdigitmodel(digitizer);
 
-    resp=resp/resp(find(fre<.1,1,'last'));
+    resp=resp/abs(resp(find(fre<.1  ,1,'last')));
     if(~strcmp(sensor,'Epi-EST') && ~strcmp(sensor,'Titan') && ...
             ~strcmp(sensor,'CMG-5T') && ~strcmp(sensor,'147-01/3') && ...
             ~strcmp(sensor,'PA-23'))
@@ -71,7 +72,13 @@ function [pspec, per, stahand, tseries, ttime] = noise(noisedata, ...
     per = 1./fre;
     stahand = [ net ' ' sta ' ' loc ' ' chan ' ' year ' ' day];
     tseries = detrend(noisedata/digsen);
+    if(lowpass)
+        h=fdesign.lowpass('N,F3db',8,0.1,sps);  
+        d=design(h,'FIR');
+        tseries = filtfilt(d.Numerator,1,tseries);
+    end
     ttime = noisetime;
+    mabsvolt = mean(abs(tseries));
 end
 
 
