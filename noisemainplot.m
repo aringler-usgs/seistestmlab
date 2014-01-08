@@ -6,9 +6,11 @@ function noisemainplot
     digtype={'Q330HR','Q330','Q330HRx20','Q330x20'};
     sentype={'STS-1','STS-1t5','STS-2SGgen1','STS-2SGgen2', ...
         'STS-2SGgen3', 'STS-2HGgen1', 'STS-2HGgen2', 'STS-2HGgen3', ...
-        'STS-2.5', 'KS-54000','KS-36000','CMG-3NSN','CMG-3T20000','CMG-3T1500', ...
-        'TR-240','TR-120', 'TR-CMPT','Titan','RefTek151-120','CMG-5T','147-01/3','Epi-EST','PA-23'};
+        'STS-2.5', 'KS-54000','KS-36000','CMG-3NSN','CMG-3T20000', ...
+        'CMG-3T1500', 'TR-240','TR-120', 'TR-CMPT','Titan', ...
+        'RefTek151-120','CMG-5T','147-01/3','Epi-EST','PA-23'};
     
+%Include the reference models
     nlnm=load('auxfiles/NLNM.txt');
     nhnm=load('auxfiles/NHNM.txt');
 
@@ -131,7 +133,7 @@ function noisemainplot
    hold on
    semilogx(nhnm(:,1),nhnm(:,2),'color','k','LineWidth',3);
    set(gca,'FontSize',14);
-   xlim([.01 1000]);
+   xlim([.001 1000]);
    ylim([-200 -80]);
    legend(p1,'NLNM','FontSize',14,'Location','NorthWest');
    hold off
@@ -334,7 +336,7 @@ function noisemainplot
         title('Noise Estimate','FontSize',14);
         xlabel('Period (s)','FontSize',14);
         ylabel('Power (dB)','FontSize',14);
-        xlim([.01 1000]);
+        xlim([.001 1000]);
         ylim([-200 -80]);
         if(length([phand1 phand2 phand3]) == 3);
             legend([phand1 phand2 phand3 p1],stahand1,stahand2, ...
@@ -372,7 +374,7 @@ function noisemainplot
         hold on
         semilogx(nhnm(:,1),nhnm(:,2),'color','k','LineWidth',3);
         set(gca,'FontSize',14);
-        xlim([.01 1000]);
+        xlim([.001 1000]);
         ylim([-200 -80]);
         legend(p1,'NLNM','FontSize',14,'Location','NorthWest');
         hold off
