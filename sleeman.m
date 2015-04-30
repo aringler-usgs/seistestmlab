@@ -160,14 +160,14 @@ function [pspec1, stahand1, tseries1, ttime1, mabsvolt1, ...
     end
 
     
-    np1=10*log10((pspec1 - pspec21.*pspec13./pspec23)./(abs(resp1).^2));
-    np2=10*log10((pspec2 - conj(pspec23).*pspec21./conj(pspec13))./(abs(resp2).^2));
-    np3=10*log10((pspec3 - pspec23.*conj(pspec13)./pspec21)./(abs(resp3).^2));
+    np1=real(10*log10((pspec1 - pspec21.*pspec13./pspec23)./(abs(resp1).^2)));
+    np2=real(10*log10((pspec2 - conj(pspec23).*pspec21./conj(pspec13))./(abs(resp2).^2)));
+    np3=real(10*log10((pspec3 - pspec23.*conj(pspec13)./pspec21)./(abs(resp3).^2)));
     
     
-    pspec1=10*log10(pspec1./(abs(resp1).^2));
-    pspec2=10*log10(pspec2./(abs(resp2).^2));
-    pspec3=10*log10(pspec3./(abs(resp3).^2));
+    pspec1=real(10*log10(pspec1./(abs(resp1).^2)));
+    pspec2=real(10*log10(pspec2./(abs(resp2).^2)));
+    pspec3=real(10*log10(pspec3./(abs(resp3).^2)));
     per = 1./fre;
     stahand1 = [ net1 ' ' sta1 ' ' loc1 ' ' chan1 ' ' year1 ' ' day1];
     stahand2 = [ net2 ' ' sta2 ' ' loc2 ' ' chan2 ' ' year2 ' ' day2];
