@@ -554,7 +554,8 @@ switch EncodingFormat
 		x0 = signednbit(frame32(2,1),32);	% forward integration constant
 		xn = signednbit(frame32(3,1),32);	% reverse integration constant
 		% nibbles is an array of the same size as frame32...
-		nibbles = bitand(bitshift(repmat(frame32(1,:),16,1),repmat(-30:2:0,size(frame32,2),1)'),bitcmp(0,2));
+        % removed the bitcmp(0,2) and replaced it with 3
+		nibbles = bitand(bitshift(repmat(frame32(1,:),16,1),repmat(-30:2:0,size(frame32,2),1)'),bitcmpOld(0,2));
 		
 		if EncodingFormat == 10
 
@@ -645,7 +646,7 @@ switch EncodingFormat
 		if xor(~WordOrder,le)
 			dd = swapbytes(dd);
 		end
-		dd = (double(bitand(dd,bitcmp(0,12)))-2^11)./2.^double(bitand(bitshift(dd,-12),bitcmp(0,3)));
+		dd = (double(bitand(dd,bitcmpOld(0,12)))-2^11)./2.^double(bitand(bitshift(dd,-12),bitcmpOld(0,3)));
 		D.d = dd(1:D.NumberSamples);
 		
 	case 14
@@ -658,7 +659,7 @@ switch EncodingFormat
 		if xor(~WordOrder,le)
 			dd = swapbytes(dd);
 		end
-		dd = (double(bitand(dd,bitcmp(0,12)))-2^11)./2.^double(bitand(bitshift(dd,-12),bitcmp(0,4)));
+		dd = (double(bitand(dd,bitcmpOld(0,12)))-2^11)./2.^double(bitand(bitshift(dd,-12),bitcmpOld(0,4)));
 		D.d = dd(1:D.NumberSamples);
 		
 	case 15
@@ -730,7 +731,7 @@ function d = bitsplit(x,b,n)
 
 sign = repmat((b:-n:n)',1,size(x,1));
 x = repmat(x',b/n,1);
-d = double(bitand(bitshift(x,flipud(sign-b)),bitcmp(0,n))) ...
+d = double(bitand(bitshift(x,flipud(sign-b)),bitcmpOld(0,n))) ...
 	- double(bitget(x,sign))*2^n;
 
 % --- below the former formula for scalar value of X (3 times more efficient)
@@ -743,4 +744,4 @@ d = double(bitand(bitshift(x,flipud(sign-b)),bitcmp(0,n))) ...
 function d = signednbit(x,n)
 % signednbit(X,N) returns signed N-bit value from unsigned N-bit number X.
 
-d = double(bitand(x,bitcmp(0,n))) - double(bitget(x,n)).*2^n;
+d = double(bitand(x,bitcmpOld(0,n))) - double(bitget(x,n)).*2^n;
