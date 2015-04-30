@@ -44,7 +44,7 @@ function [pspec, per, stahand, tseries, ttime, mabsvolt ...
     %[pspec,fre]=pwelch(noisedata,floor(length(noisedata)/10), ...
      %   floor(length(noisedata)/20),floor(length(noisedata)/10),sps);
 	[pspec,fre]=psd(noisedata,floor(length(noisedata)/10),sps);
-    pspec = pspec/sps;
+    %pspec = pspec/sps;
     
     %Get the response and correct
     [zer,pol,gai]=getrespmodel(sensor);
