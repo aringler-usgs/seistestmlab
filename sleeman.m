@@ -80,6 +80,16 @@ function [pspec1, stahand1, tseries1, ttime1, mabsvolt1, ...
         noisetime=noisetime(find(noisetime<= etime));
     end
     
+    if((length(noisedata1) ~= length(noisedata2)) || (length(noisedata1) ~= length(noisedata3)) || (length(noisedata2) ~= length(noisedata3)))
+        minlen = min(min(length(noisedata1),length(noisedata2)),length(noisedata3));
+        noisedata1=noisedata1(1:minlen);
+        noisedata2=noisedata2(1:minlen);
+        noisedata3=noisedata3(1:minlen);
+        noisetime1=noisetime1(1:minlen);
+        noisetime2=noisetime2(1:minlen);
+        noisetime3=noisetime3(1:minlen);
+    end
+    
     overlap = floor(.66*length(noisedata1)/10);
     win = floor(length(noisedata1)/10);
 
