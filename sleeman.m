@@ -85,18 +85,18 @@ function [pspec1, stahand1, tseries1, ttime1, mabsvolt1, ...
 
     %Compute the spectra
 	[pspec1,fre]=cpsd(noisedata1,noisedata1,win,overlap, win , sps);
-    pspec1 = pspec1/sps;
+    %pspec1 = pspec1/sps;
     [pspec2,fre]=cpsd(noisedata2,noisedata2,win,overlap, win , sps);
-    pspec2 = pspec2/sps;
+    %pspec2 = pspec2/sps;
     [pspec3,fre]=cpsd(noisedata3,noisedata3,win,overlap, win , sps);
-    pspec3 = pspec3/sps;
+    %pspec3 = pspec3/sps;
     %Lets compute the cross-power
     [pspec21, fre]=cpsd(noisedata2,noisedata1,win,overlap, win , sps);
-    pspec21 = pspec21/sps;
+    %pspec21 = pspec21/sps;
     [pspec13, fre]=cpsd(noisedata1,noisedata3,win,overlap, win , sps);
-    pspec13 = pspec13/sps;
+    %pspec13 = pspec13/sps;
     [pspec23, fre]=cpsd(noisedata2,noisedata3,win,overlap, win , sps);
-    pspec23 = pspec23/sps;
+    %pspec23 = pspec23/sps;
     
     
     
