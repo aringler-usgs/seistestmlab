@@ -9,19 +9,19 @@ function [pspec1, stahand1, tseries1, ttime1, mabsvolt1, ...
     try
         [noisedata1,~]=rdmseed(noisedata1);
     catch ME
-        display('Error reading in data 1 \n');
+        display('Error reading in data 1');
     end
     try
         [noisedata2,~]=rdmseed(noisedata2);
     catch ME
-        display('Error reading in data 2 \n');
+        display('Error reading in data 2');
     end
     try
         [noisedata3,~]=rdmseed(noisedata3);
     catch ME
-        display('Error reading in data 3 \n');
+        display('Error reading in data 3');
     end
-
+    %Pull out information about the time series for plotting
     net1=deblank(noisedata1(1,1).NetworkCode);
     net2=deblank(noisedata2(1,1).NetworkCode);
     net3=deblank(noisedata3(1,1).NetworkCode);
@@ -36,9 +36,11 @@ function [pspec1, stahand1, tseries1, ttime1, mabsvolt1, ...
     chan3=deblank(noisedata3(1,1).ChannelIdentifier);
     if(noisedata1(1,1).SampleRate ~= noisedata2(1,1).SampleRate || ...
         noisedata2(1,1).SampleRate ~= noisedata3(1,1).SampleRate)
-        display('Sample Rates are not equal \n');
+        display('Sample Rates are not equal');
     end
-    sps=noisedata1(1,1).SampleRate;
+    sps1=noisedata1(1,1).SampleRate;
+    sps2=noisedata2(1,1).SampleRate;
+    sps3=noisedata3(1,1).SampleRate;
     year1=noisedata1(1,1).RecordStartTimeISO;
     year2=noisedata2(1,1).RecordStartTimeISO;
     year3=noisedata3(1,1).RecordStartTimeISO;
@@ -79,9 +81,33 @@ function [pspec1, stahand1, tseries1, ttime1, mabsvolt1, ...
         noisedata=noisedata(find(noisetime<= etime));
         noisetime=noisetime(find(noisetime<= etime));
     end
+    %Here is logic to deal with different sample rates
+    if(sps1 ~= sps2 || sps2 ~= sps3 || sps1 ~= sps3)
+        [sps,idx] = min([sps1 sps2 sps3]);
+        noisedata1=decimate(noisedata1,sps1/sps);
+        noisedata2=decimate(noisedata2,sps2/sps);
+        noisedata3=decimate(noisedata3,sps3/sps);
+        noisetime1=decimate(noisetime1,sps1/sps);
+        noisetime2=decimate(noisetime2,sps2/sps);
+        noisetime3=decimate(noisetime3,sps3/sps);
+        if idx ==1
+            noisetime = noisetime1;
+        elseif idx ==2
+            noisetime = noisetime2;
+        else
+            noisetime = noisetime3;
+        end
+        
+    else
+        sps = sps1;
+        noisetime = noisetime1;
+    end
     
-    if((length(noisedata1) ~= length(noisedata2)) || (length(noisedata1) ~= length(noisedata3)) || (length(noisedata2) ~= length(noisedata3)))
-        minlen = min(min(length(noisedata1),length(noisedata2)),length(noisedata3));
+    if((length(noisedata1) ~= length(noisedata2)) || ...
+            (length(noisedata1) ~= length(noisedata3)) || ...
+            (length(noisedata2) ~= length(noisedata3)))
+        minlen = min(min(length(noisedata1),length(noisedata2)), ...
+            length(noisedata3));
         noisedata1=noisedata1(1:minlen);
         noisedata2=noisedata2(1:minlen);
         noisedata3=noisedata3(1:minlen);
@@ -89,6 +115,9 @@ function [pspec1, stahand1, tseries1, ttime1, mabsvolt1, ...
         noisetime2=noisetime2(1:minlen);
         noisetime3=noisetime3(1:minlen);
     end
+    
+
+
     
     overlap = floor(.66*length(noisedata1)/10);
     win = floor(length(noisedata1)/10);
@@ -192,11 +221,11 @@ function [pspec1, stahand1, tseries1, ttime1, mabsvolt1, ...
         tseries2 = filtfilt(d.Numerator,1,tseries2);
         tseries3 = filtfilt(d.Numerator,1,tseries3);
     end
-    ttime1 = noisetime1;
+    ttime1 = noisetime;
     mabsvolt1 = mean(abs(tseries1));
-    ttime2 = noisetime2;
+    ttime2 = noisetime;
     mabsvolt2 = mean(abs(tseries2));
-    ttime3 = noisetime3;
+    ttime3 = noisetime;
     mabsvolt3 = mean(abs(tseries3));
 end
 
